@@ -1,2 +1,4 @@
 # SE-353-Project
-Semester Project for SE-353
+## Folder layout:
+### /Doc
+Provides documents for the project, including requirements for those documents.
