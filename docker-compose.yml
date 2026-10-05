@@ -1,0 +1,24 @@
+services:
+  db:
+    # Container w/ version
+    image: mariadb:11
+    container_name: se353-db
+    restart: unless-stopped
+
+    # Config Stuff. Will push to .env file
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIABD_DATABASE: restaurant
+      MARIABD_USER: restaurant
+      MARIABD_PASSWORD: restaurantpassword
+    
+    # For interacting with Flask server. Setup later
+    ports:
+      - "3306:3306"
+    
+    # Non-volitile storage
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
