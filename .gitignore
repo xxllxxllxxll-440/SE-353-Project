@@ -22,4 +22,4 @@ __pycache__/
 Thumbs.db
 
 #DrawIO
-/Doc/DrawIO/*.drawio.bkp
+*.drawio.bkp
