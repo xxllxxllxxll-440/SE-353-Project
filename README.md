@@ -20,7 +20,7 @@ git clone https://github.com/xxllxxllxxll-440/SE-353-Project.git
 cd SE-353-Project
 ```
 
-### 2. Create a Python virtaul environment
+### 2. Create a Python virtual environment
 
 This prevents this repo from disturbing your current Python environment:
 
@@ -28,7 +28,7 @@ This prevents this repo from disturbing your current Python environment:
 python3 -m venv .venv
 ```
 
-### 3. Activate vitrual environment
+### 3. Activate virtual environment
 
 On Windows PowerShell:
 
@@ -68,7 +68,7 @@ Done by running:
 python run.py
 ```
 
-The terminal should output the link to the server startpage.
+The terminal should output the link to the server start-page.
 
 ## Stopping the server
 
