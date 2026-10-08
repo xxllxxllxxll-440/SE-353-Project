@@ -2,7 +2,50 @@
 
 This project uses Git and GitHub for version control. Each team member should have their own local copy of the repository.
 
-## First-Time Setup
+## Table of Contents
+
+- [GitHub Desktop](#github-desktop)
+  - [Set Up GitHub Desktop](#set-up-github-desktop)
+  - [Use GitHub Desktop for the Normal Work Cycle](#use-github-desktop-for-the-normal-work-cycle)
+  - [Create a Feature Branch in GitHub Desktop](#create-a-feature-branch-in-github-desktop)
+- [Command Line](#command-line)
+  - [Configure Git](#configure-git)
+  - [Use the Command Line for the Normal Work Cycle](#use-the-command-line-for-the-normal-work-cycle)
+  - [Work on a Feature Branch from the Command Line](#work-on-a-feature-branch-from-the-command-line)
+- [Before Pushing](#before-pushing)
+- [Do Not Commit Secrets](#do-not-commit-secrets)
+- [If a Push Is Rejected](#if-a-push-is-rejected)
+- [Recommended Commit Messages](#recommended-commit-messages)
+
+## GitHub Desktop
+
+You can use GitHub Desktop instead of the command line for the same workflow.
+
+### Set Up GitHub Desktop
+
+1. Install [GitHub Desktop](https://desktop.github.com/) and sign in to your GitHub account.
+2. Select **File > Clone Repository** and choose this project from the **GitHub.com** tab, or use the **URL** tab if you have the repository URL.
+3. Choose a local folder for the project and select **Clone**.
+4. Open GitHub Desktop's settings/preferences and, under **Git**, check that your name and email are correct. These are recorded with your commits.
+
+### Use GitHub Desktop for the Normal Work Cycle
+
+1. In GitHub Desktop, select this project under **Current Repository**.
+2. Before editing, select **Fetch origin**. If GitHub Desktop indicates that there are incoming changes, select **Pull origin** to bring them into your local copy.
+3. Make and test your changes in the project.
+4. Return to GitHub Desktop and review the changed files in the **Changes** tab. Select or clear the checkboxes to include only the files you intend to commit. Do not commit secrets such as `.env` files, passwords, or API keys.
+5. Enter a short description in the **Summary** field, then select **Commit to [your branch]**.
+6. Select **Push origin** to upload your commit to GitHub. A commit is only a local checkpoint until it is pushed.
+
+### Create a Feature Branch in GitHub Desktop
+
+For larger features, first select `main` from **Current Branch**, then fetch and pull so it is up to date. Select **Current Branch > New Branch**, enter a descriptive branch name (for example, `inventory-page`), and create the branch from `main`. Follow the normal work cycle above, then select **Publish branch** to upload it. Open the project on GitHub.com and create a pull request to have the branch reviewed and merged into `main`.
+
+For small changes, the team may work directly on `main` if everyone agrees. Pull before starting and push frequently.
+
+## Command Line
+
+### Configure Git
 
 After cloning the repository, configure your Git username and email if you have not already done so:
 
@@ -17,21 +60,13 @@ You can check your configuration with:
 git config --global --list
 ```
 
-## Before Starting Work
+### Use the Command Line for the Normal Work Cycle
 
-Always get the newest version of the project before making changes:
+For most work, get the newest version before making changes:
 
 ```bash
 git pull
 ```
-
-If you are using a Python virtual environment, activate it afterward if necessary:
-
-```bash
-source .venv/bin/activate
-```
-
-## Making Changes
 
 Make your changes to the project normally.
 
@@ -42,8 +77,6 @@ git status
 ```
 
 It is a good idea to check this before committing so you know exactly what you are about to save.
-
-## Saving Your Changes
 
 First, add the files you want to include in the commit:
 
@@ -65,8 +98,6 @@ git commit -m "Add inventory item page"
 
 A commit is a saved checkpoint of your work. It does not upload anything to GitHub yet.
 
-## Uploading Your Changes
-
 After committing:
 
 ```bash
@@ -75,9 +106,7 @@ git push
 
 Your commit will now be uploaded to GitHub.
 
-## Normal Work Cycle
-
-For most work, the process should be:
+The normal work cycle is:
 
 ```bash
 git pull
@@ -90,39 +119,51 @@ git commit -m "Describe your changes"
 git push
 ```
 
-### Before Pushing
+### Work on a Feature Branch from the Command Line
 
-Make sure the application still runs before pushing your changes:
+For larger features, use a separate branch instead of working directly on `main`.
 
 ```bash
-python run.py
+git checkout -b inventory-page
 ```
 
-If you changed Python code, templates, database code, or other important functionality, test the affected functionality before committing.
+Work normally, then:
 
-## Important: Do Not Commit Secrets
+```bash
+git add .
+git commit -m "Add inventory page"
+git push -u origin inventory-page
+```
+
+The branch can then be reviewed and merged into `main`.
+
+For small changes, the team may work directly on `main` if everyone agrees, but pulling before starting and pushing frequently is still required.
+
+## Before Pushing
+
+Make sure the application still runs before pushing your changes.
+
+If you changed code, templates, database code, or other important functionality, test the affected functionality before committing.
+
+If GitHub Desktop reports that the remote has changes you do not have locally, fetch and pull before trying again. **Do not force-push.** If a merge conflict appears, stop and ask another team member for help; do not discard or overwrite files to make it disappear.
+
+## Do Not Commit Secrets
 
 Never commit:
 
-* Database passwords
-* API keys
-* `.env` files
-* Personal credentials
-* Private configuration files
+- Database passwords
+- API keys
+- `.env` files
+- Personal credentials
+- Private configuration files
 
 These should be listed in `.gitignore`.
 
-## If `git push` Is Rejected
+## If a Push Is Rejected
 
 If Git says your push was rejected because the remote repository contains changes you do not have locally, **do not use `git push --force`**.
 
-First run:
-
-```bash
-git pull
-```
-
-If Git reports a merge conflict, stop and ask another team member for help before continuing. Do not randomly delete or overwrite files to make the conflict disappear.
+Run `git pull` (or fetch and pull in GitHub Desktop) to bring in remote changes before trying again. If Git reports a merge conflict, stop and ask another team member for help before continuing. Do not randomly delete or overwrite files to make the conflict disappear.
 
 ## Recommended Commit Messages
 
@@ -147,25 +188,3 @@ update
 fixed it
 asdf
 ```
-
-## Working on Different Features
-
-For larger features, use a separate branch instead of working directly on `main`.
-
-Create a branch:
-
-```bash
-git checkout -b inventory-page
-```
-
-Work normally, then:
-
-```bash
-git add .
-git commit -m "Add inventory page"
-git push -u origin inventory-page
-```
-
-The branch can then be reviewed and merged into `main`.
-
-For small changes, the team may work directly on `main` if everyone agrees, but pulling before starting and pushing frequently is still required.
