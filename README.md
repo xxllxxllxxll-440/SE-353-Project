@@ -50,6 +50,14 @@ source .venv/bin/activate
 
 You can verify if you are in the virtual environment if `(.venv)` is shown before the prompt.
 
+### Disable the virtual environment
+
+Run:
+
+```bash
+deactivate
+```
+
 ### 4. Install project Python dependencies
 
 Installs the required Python packages:
