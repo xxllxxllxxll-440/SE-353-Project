@@ -1,6 +1,6 @@
-"""Database layer for the Sixty-Three Social classroom prototype.
+"""Database layer for the classroom prototype.
 
-This module is meant to be imported by Cole's Flask/backend application.
+Cole's Flask/backend application will import this.
 It does not implement login, authorization, or a production-ready public API.
 """
 import os
