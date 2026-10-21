@@ -1,4 +1,4 @@
-"""Small offline unit tests; no database connection or API credits needed.
+"""Small offline unit tests; no database connection credits needed.
 Run after installing requirements: python -m unittest test_database_logic.py
 """
 import unittest
