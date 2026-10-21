@@ -1,4 +1,4 @@
--- Sixty-Three Social / phase II database foundation
+-- phase II database foundation
 -- RUN FIRST in MySQL Workbench on the RESTAURANT PROJECT connection.
 -- Safe on repeated runs: tables are only created if they do not already exist.
 -- Does NOT delete tables or overwrite existing restaurant records.
