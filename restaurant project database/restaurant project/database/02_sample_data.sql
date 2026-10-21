@@ -1,5 +1,5 @@
 -- RUN SECOND, after 01_create_database.sql.
--- Demonstration data only, not real Sixty-Three Social financial records.
+-- Demonstration data only, not real financial records.
 -- Safe to re-run: seeded named rows and references are not duplicated.
 USE restaurant_project;
 
