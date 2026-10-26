@@ -43,13 +43,13 @@ On a fresh sample database, there should be 9 tables, 2 views, 4 inventory items
 Open PowerShell in the cloned repository, then run these commands in order:
 
 ```PowerShell
-cd database
-
 py -m venv .venv
 
 .\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt
 
 Copy-Item .env.example .env
+
+cd database
 ```
 
 If the `py` command is not recognized, try `python` instead. Open `database/.env` in Notepad and replace the placeholders with your personal Aiven connection details:
