@@ -41,4 +41,8 @@ Provides documents for the project, including requirements for those documents.
 
 ### [/app](/app/)
 
-Where the Python application lives, with documentation to run it
+Where the Python application lives, with documentation to run it.
+
+### [/database](/database/)
+
+Where the server application lives, with documentation to run it.
