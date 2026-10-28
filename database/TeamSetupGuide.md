@@ -14,7 +14,6 @@ This guide explains how to set up the shared database and run the Python code. I
 | [app/database.py](app/database.py) | Connects Python to MySQL; inventory, purchases, and reports. |
 | [app/test\_database\_logic.py](app/test\_database\_logic.py) | Small offline tests for purchase logic. |
 | [app/.env.example](app/.env.example) | Template for local database settings; contains no password. |
-| [app/requirements.txt](app/requirements.txt) | The two Python packages needed for this part. |
 
 ## 2. Get the project from GitHub
 
