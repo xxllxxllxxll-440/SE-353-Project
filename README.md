@@ -20,6 +20,16 @@ git clone https://github.com/xxllxxllxxll-440/SE-353-Project.git
 cd SE-353-Project
 ```
 
+### 2. Starting the project
+
+Documentation to start the different applications within the software package
+
+[Flask Web Server](/app/README.md)
+
+[SQL Backend (Windows)](/database/TeamSetupGuide.md)
+
+[SQL Backend (Linux)](/database/LinuxTeamSetupGuide.md)
+
 ## While working on project
 
 Ensure that your local copy is staying up to date:
