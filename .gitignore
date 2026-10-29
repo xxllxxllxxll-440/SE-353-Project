@@ -10,7 +10,7 @@ __pycache__/
 *.env
 
 # Certificate
-*.pem
+ca.pem
 
 # IDE
 .vscode/
