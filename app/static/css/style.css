@@ -30,7 +30,7 @@ body header nav ul {
     padding: 0.5rem;
 }
 
-/* Nav list elements */
+/* Nav list elements (desktop) */
 body header nav ul li a{
     display: flex;
     padding: 1em 0.5em;
@@ -40,8 +40,15 @@ body header nav ul li a{
     margin: 0;
 }
 
-/* Selected Nav list elements */
-body header nav ul li a:hover {
+/* Nav list (mobile) */
+body header nav a{
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Selected Nav list elements (desktop then mobile) */
+body header nav ul li a:hover,
+body header nav a:hover {
     background-color:darkblue;
 }
 
