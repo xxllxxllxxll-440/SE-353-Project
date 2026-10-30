@@ -1,24 +1,61 @@
 /* Header */
+body header {
+    display:flex;
+    background-color: blue;
+    align-items: center; /* Vertical alignment */
+    justify-content: space-between; /* Pushes nav to the right */
+    padding: 0.5rem 1rem;
+}
+
+/* Header logo and title*/
 body header a {
     display: flex;
     align-items: center;
     gap: 1rem;
     text-decoration: none;
-    background-color: blue;
     color: white;
 }
 /* Logo in header */
-body header a img {
-    width: 10%;
+body header > a img {
+    width: 3em;
 }
 
 /* Navigation list */
-body header nav ul li {
-    width: 20%;
-    white-space: nowrap;
+body header nav ul {
+    float: right;
+    display: flex;
+    gap: 0.5 rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
 }
 
-/* Navigation list elements */
-body header nav ul li a {
-    display:inline-block;
+/* Nav list elements */
+body header nav ul li a{
+    display: flex;
+    padding: 1em 0.5em;
+    font-size: large;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    margin: 0;
+}
+
+/* Selected Nav list elements */
+body header nav ul li a:hover {
+    background-color:darkblue;
+}
+
+/* Media queries */
+/* Mobile view */
+@media screen and (max-width: 949px) {
+    .desktop{
+        display: none;
+    }
+}
+
+/* Desktop/Tablet view */
+@media screen and (min-width: 950px) {
+    .mobile{
+        display: none;
+    }
 }
