@@ -1,22 +1,43 @@
-<!-- Home page -->
+<!-- Home page / Dashboard -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <title>Restaurant Manager</title>
-
+        <title>Dashboard</title>
         <!-- Links to style.css no matter position in project -->
         <link
             rel="stylesheet"
-            href="{{ url_for('static', filename='css/style.css') }}"
+            href="../static/css/style.css"
         >
     </head>
 
     <body>
         <header>
-            <h2>Restaurant Manager</h2>
+            <a href="index.html">
+                <img src="../static/media/logo.svg" alt="Restaurant Manager Logo">
+                <h1>Restaurant Manager</h1>
+            </a>
+            <!-- Top links for navigation -->
+            <nav>
+                <ul>
+                    <li>
+                        <a href="index.html">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#">Financials</a>
+                    </li>
+                    <li>
+                        <a href="#">Inventory</a>
+                    </li>
+                    <li>
+                        <a href="#">Reports</a>
+                    </li>
+                    <li>
+                        <a href="#">Account</a>
+                    </li>
+                </ul>
+            </nav>
         </header>
     </body>
 </html>

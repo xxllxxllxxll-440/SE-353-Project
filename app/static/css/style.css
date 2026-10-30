@@ -1,8 +1,24 @@
-body {
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0;
-    padding: 2rem;
+/* Header */
+body header a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    background-color: blue;
+    color: white;
 }
-header {
-    margin-bottom: 2rem;
+/* Logo in header */
+body header a img {
+    width: 10%;
+}
+
+/* Navigation list */
+body header nav ul li {
+    width: 20%;
+    white-space: nowrap;
+}
+
+/* Navigation list elements */
+body header nav ul li a {
+    display:inline-block;
 }
