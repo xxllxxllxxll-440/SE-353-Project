@@ -1,27 +1,52 @@
+<!-- Home page / Dashboard -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, inital-scale=1.0">
-
-        <title>Restaurant Manager</title>
-
-        <!-- Links to style.css no matter position in project -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
         <link
             rel="stylesheet"
-            href="{{ url_for('static', filename='css/style.css') }}"
+            href="../static/css/style.css"
         >
     </head>
 
     <body>
-
         <header>
-            <h1>Restaurant Manager</h1>
+            <a href="index.html">
+                <img src="../static/media/logo.svg" alt="Restaurant Manager Logo">
+                <h1>Restaurant Manager</h1>
+            </a>
+            <nav>
+                <!-- Top links for navigation for desktop -->
+                <div class="desktop">
+                    <ul>
+                        <li>
+                            <a href="index.html">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#">Financials</a>
+                        </li>
+                        <li>
+                            <a href="#">Inventory</a>
+                        </li>
+                        <li>
+                            <a href="#">Reports</a>
+                        </li>
+                        <li>
+                            <a href="#">Account</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Top link navigation for mobile-->
+                <div class="mobile">
+                    <a href="index.html">Dashboard</a>
+                    <a href="#">Financials</a>
+                    <a href="#">Inventory</a>
+                    <a href="#">Reports</a>
+                    <a href="#">Account</a>
+                </div>
+            </nav>
         </header>
-
-        <main>
-            <h2>Dashboard</h2>
-            <p>Restaurant management system is running.</p>
-        </main>
     </body>
 </html>

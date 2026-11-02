@@ -1,8 +1,68 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 2rem;
+/* Header */
+body header {
+    display:flex;
+    background-color: blue;
+    align-items: center; /* Vertical alignment */
+    justify-content: space-between; /* Pushes nav to the right */
+    padding: 0.5rem 1rem;
 }
-header {
-    margin-bottom: 2rem;
+
+/* Header logo and title*/
+body header a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: white;
+}
+/* Logo in header */
+body header > a img {
+    width: 3em;
+}
+
+/* Navigation list */
+body header nav ul {
+    float: right;
+    display: flex;
+    gap: 0.5 rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+}
+
+/* Nav list elements (desktop) */
+body header nav ul li a{
+    display: flex;
+    padding: 1em 0.5em;
+    font-size: large;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    margin: 0;
+}
+
+/* Nav list (mobile) */
+body header nav a{
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Selected Nav list elements (desktop then mobile) */
+body header nav ul li a:hover,
+body header nav a:hover {
+    background-color:darkblue;
+}
+
+/* Media queries */
+/* Mobile view */
+@media screen and (max-width: 949px) {
+    .desktop{
+        display: none;
+    }
+}
+
+/* Desktop/Tablet view */
+@media screen and (min-width: 950px) {
+    .mobile{
+        display: none;
+    }
 }
