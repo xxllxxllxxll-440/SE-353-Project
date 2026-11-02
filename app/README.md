@@ -1,5 +1,9 @@
 # Python Website Server
 
+## Note
+
+Using <https://flask.palletsprojects.com/en/stable/tutorial/> as a reference for Flask
+
 ## Running the Server
 
 ### 1. Create a Python virtual environment
