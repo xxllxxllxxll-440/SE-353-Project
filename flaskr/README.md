@@ -56,13 +56,13 @@ pip install -r requirements.txt
 
 ## Starting the development server
 
-Done by running:
+Done by running the following in the root of the project:
 
 ```bash
-python run.py
+flask --app flaskr run --debug
 ```
 
-The terminal should output the link to the server start-page.
+The terminal should output the link to the server start-page, then add `/hello` to access the Hello World page.
 
 ## Stopping the server
 

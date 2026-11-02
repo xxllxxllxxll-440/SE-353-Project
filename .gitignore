@@ -3,6 +3,16 @@ __pycache__/
 *.py[cod]
 *.so
 
+# Flask
+*.pyc
+htmlcov/
+
+dist/
+build/
+*.egg-info/
+
+instance/
+
 # Virtual environment
 .venv/
 
