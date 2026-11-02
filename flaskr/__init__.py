@@ -1,6 +1,5 @@
-import os
-
 from flask import Flask
+from database.app import database as db
 
 
 def create_app(test_config=None):
@@ -9,9 +8,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # Keeps data safe, needs modified before publishing
-        SECRET_KEY='dev',
-        # Database location, will be modified to integrate later
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        SECRET_KEY='dev'
     )
 
     if test_config is None:
@@ -20,9 +17,6 @@ def create_app(test_config=None):
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists (for SQLite, will be removed)
-    os.makedirs(app.instance_path, exist_ok=True)
 
     # a simple page that says hello (temp)
     @app.route('/hello')

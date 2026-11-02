@@ -64,6 +64,15 @@ flask --app flaskr run --debug
 
 The terminal should output the link to the server start-page, then add `/hello` to access the Hello World page.
 
+## Testing Database Connection
+
+Running this command within the root of the project verifies if Flask can communicate to the MYSQL server.
+You will need to configure your `.env` file within `database/app` first.
+
+```bash
+python -c "from database.app import database; print(database.connection_check())"
+```
+
 ## Stopping the server
 
 Press `Ctrl+C` in the terminal running the server.
