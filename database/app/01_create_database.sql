@@ -130,6 +130,14 @@ CREATE TABLE IF NOT EXISTS revenue (
     INDEX idx_revenue_date (revenue_date)
 ) ENGINE=InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 CREATE OR REPLACE VIEW vw_low_stock AS
 SELECT i.item_id, i.sku, i.name AS item_name,
        i.quantity_on_hand, i.reorder_level, i.unit,
