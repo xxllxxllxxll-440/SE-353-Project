@@ -11,6 +11,9 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
+# Imports for Flask (g is for data storage)
+from flask import current_app, g
+
 load_dotenv(Path(__file__).parent / ".env")
 CENTS = Decimal("0.01")
 
@@ -64,6 +67,22 @@ def get_connection():
         autocommit=False,
     )
 
+# Setup connection for Flask
+# Establishes a new connection only on the first call, otherwise reuses it
+def get_db():
+    """Get a database connection for the current Flask application context."""
+    if "db" not in g:
+        g.db = get_connection()
+
+    return g.db
+
+# Ends connection for Flask
+def close_db(e=None):
+    """Close the database connection at the end of the application context."""
+    db = g.pop("db", None)
+
+    if db is not None:
+        db.close()
 
 def fetch_all(sql, params=()):
     conn = get_connection()
