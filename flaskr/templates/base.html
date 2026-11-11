@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Overridable title -->
+        <title>{% block title %}{% endblock %} - RMS</title>
+        <!-- CSS import -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <!-- Top header bar -->
+        <header>
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Restaurant Manager Logo">
+            <!--- Overridable header -->
+            <h1>{% block header %}{% endblock %}</h1>
+            <nav>
+                <!-- Top links for navigation for desktop -->
+                <div class="desktop">
+                    <ul>
+                        <!-- Displays if user is logged in -->
+                        {% if g.user %}
+                        <!-- Shows username -->
+                        <li>{{ g.user['username'] }}</li>
+                        <!-- Log out function -->
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                        <!-- Displays if user is not logged in -->
+                        {% else %}
+                        <!-- Register for account function -->
+                        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                        <!-- Login function -->
+                        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Main content -->
+        <main>
+            <!-- Shows error messages from Python code -->
+            {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+            <!-- Overridable main content -->
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>
