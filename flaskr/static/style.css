@@ -37,6 +37,10 @@ img {
     display: none;
 }
 
+main {
+    margin-top: 2em;
+}
+
 @media screen and (max-width: 949px) {
     header {
         justify-content: center;
