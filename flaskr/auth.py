@@ -1,3 +1,4 @@
+
 # For authentication
 
 import functools
@@ -8,10 +9,11 @@ from flask import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from database.app import database as db
+from database.app import database
 
 # Blueprint tied to /auth URLs
 bp = Blueprint('auth', __name__, url_prefix='/auth')
+
 
 # Register view at /auth/register
 @bp.route('/register', methods=('GET', 'POST'))
@@ -20,8 +22,9 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+
         # Obtains database information
-        db = db.get_db()
+        conn = database.get_db()
         error = None
 
         # Validates that fields are not empty
@@ -32,22 +35,32 @@ def register():
 
         # Pushes into database
         if error is None:
+            cursor = conn.cursor()
+
             try:
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
+                cursor.execute(
+                    "INSERT INTO users (username, password_hash) VALUES (%s, %s)",
                     (username, generate_password_hash(password)),
                 )
-                db.commit()
+                conn.commit()
+
             # Occurs if user already exists
-            except db.IntegrityError:
+            except database.mysql.connector.IntegrityError:
+                conn.rollback()
                 error = f"User {username} is already registered."
+
+            finally:
+                cursor.close()
+
             # Navigates to login page if user creation is successful
-            else:
+            if error is None:
                 return redirect(url_for("auth.login"))
 
         flash(error)
+
     # Renders the HTML for the registration form
     return render_template('auth/register.html')
+
 
 # Login view at /auth/login
 @bp.route('/login', methods=('GET', 'POST'))
@@ -56,19 +69,26 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+
         # Connect to database
-        db = db.get_db()
+        conn = database.get_db()
         error = None
+
         # Find user
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            'SELECT * FROM users WHERE username = %s',
+            (username,)
+        )
+        user = cursor.fetchone()
+        cursor.close()
 
         # No matching user found
         if user is None:
             error = 'Incorrect username.'
+
         # Incorrect password
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['password_hash'], password):
             error = 'Incorrect password.'
 
         # Login, store user_id
@@ -79,8 +99,10 @@ def login():
             return redirect(url_for('index'))
 
         flash(error)
+
     # Renders HTML for login page
     return render_template('auth/login.html')
+
 
 # Verifies user before each request
 # Runs before view function
@@ -94,14 +116,21 @@ def load_logged_in_user():
         g.user = None
     else:
         # Verifies that user exists in server
-        g.user = db.get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        conn = database.get_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            'SELECT * FROM userS WHERE id = %s',
+            (user_id,)
+        )
+        g.user = cursor.fetchone()
+        cursor.close()
+
 
 # Logout view at /auth/logout
 @bp.route('/logout')
 def logout():
     # Clears cookies
     session.clear()
+
     # Redirects to the index of the website
     return redirect(url_for('index'))
