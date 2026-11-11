@@ -32,6 +32,8 @@ Documentation to start the different applications within the software package
 
 ## Interacting with the MySQL Server
 
+### Using MySQL Workbench
+
 We recommend using MySQL Workbench for this, but the setup should be similar for Oracle SQL Developer and other clients.
 
 [Downloads for MySQL Workbench are available here.](https://dev.mysql.com/downloads/workbench/)
@@ -48,6 +50,42 @@ You will need to form the connection based on the provided `.env` file. Below is
 |`DB_NAME`    |Default Schema         |
 |`DB_PASSWORD`|Factor 1 Authentication|
 |`DB_SSL_CA`  |CA Certificate Path    |
+
+### Using Oracle SQL Developer
+
+[Downloads for Oracle SQL Developer are available here.](https://www.oracle.com/database/sqldeveloper/technologies/download/)
+
+On Linux, you will need to download the `.rpm`, extract it, then open the extracted `sqldeveloper` folder and run `./sqldeveloper.sh`
+
+#### 1. Download MySQL Connector/J
+
+MySQL Connector/J is the official JDBC driver that allows Java applications, including SQL Developer, to communicate with MySQL databases.
+
+1. Visit the official [MySQL Connector/J Downloads](https://dev.mysql.com/downloads/connector/j/) page.
+2. Select **Platform Independent** as the operating system.
+3. Download the ZIP archive.
+4. Extract the downloaded archive.
+5. Locate the `.jar` file inside the extracted folder. It will be named similarly to `mysql-connector-j-9.x.x.jar`.
+
+Keep track of where you extracted this file. You will need its location in the next step.
+
+#### 2. Register the JDBC Driver in SQL Developer
+
+Once the driver has been downloaded, register it with Oracle SQL Developer.
+
+1. Open Oracle SQL Developer.
+2. Navigate to **Tools → Preferences**.
+3. Expand the **Database** section.
+4. Select **Third Party JDBC Drivers**.
+5. Click **Add Entry**.
+6. Browse to the MySQL Connector/J `.jar` file downloaded in Step 1.
+7. Select the file and click **Open**.
+8. Click **OK** to save your changes.
+9. Restart SQL Developer if necessary.
+
+After registering the driver, SQL Developer should be able to recognize MySQL JDBC connections.
+
+**Next Step:** Configure a connection to your Aiven MySQL server using its hostname, port, username, password, and SSL certificate.
 
 ## While working on project
 
