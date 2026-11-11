@@ -119,7 +119,7 @@ def load_logged_in_user():
         conn = database.get_db()
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            'SELECT * FROM userS WHERE id = %s',
+            'SELECT * FROM users WHERE id = %s',
             (user_id,)
         )
         g.user = cursor.fetchone()
