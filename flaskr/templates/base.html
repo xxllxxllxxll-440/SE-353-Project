@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Overridable title -->
-        <title>{% block title %}{% endblock %} - RMS</title>
-        <!-- CSS import -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <!-- Top header bar -->
-        <header>
-            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Restaurant Manager Logo">
-            <!--- Overridable header -->
-            <h1>{% block header %}{% endblock %}</h1>
-            <nav>
-                <!-- Top links for navigation for desktop -->
-                <div class="desktop">
-                    <ul>
-                        <!-- Displays if user is logged in -->
-                        {% if g.user %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Overridable title -->
+    <title>{% block title %}{% endblock %} - RMS</title>
+    <!-- CSS import -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="">
+        <h1>Restaurant Manager</h1>
+
+        <nav class="desktop-nav" aria-label="Desktop navigation">
+            <!-- Displays if user is logged in -->
+            {% if g.user %}
+                <!-- Shows username -->
+                {{ g.user['username'] }}
+                <!-- Log out function -->
+                <a href="{{ url_for('auth.logout') }}">Log Out</a>
+            <!-- Displays if user is not logged in -->
+            {% else %}
+                <!-- Register for account function -->
+                <a href="{{ url_for('auth.register') }}">Register</a>
+                <!-- Login function -->
+                <a href="{{ url_for('auth.login') }}">Log In</a>
+            {% endif %}
+        </nav>
+
+        <nav class="phone-nav" aria-label="Mobile navigation">
+            <details>
+                <summary>☰ Menu</summary>
+                <div class="mobile-links">
+                    <!-- Displays if user is logged in -->
+                    {% if g.user %}
                         <!-- Shows username -->
-                        <li>{{ g.user['username'] }}</li>
+                        {{ g.user['username'] }}
                         <!-- Log out function -->
-                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-                        <!-- Displays if user is not logged in -->
-                        {% else %}
+                        <a href="{{ url_for('auth.logout') }}">Log Out</a>
+                    <!-- Displays if user is not logged in -->
+                    {% else %}
                         <!-- Register for account function -->
-                        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                        <a href="{{ url_for('auth.register') }}">Register</a>
                         <!-- Login function -->
-                        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-                        {% endif %}
-                    </ul>
+                        <a href="{{ url_for('auth.login') }}">Log In</a>
+                    {% endif %}
                 </div>
-            </nav>
-        </header>
-        <!-- Main content -->
-        <main>
-            <!-- Shows error messages from Python code -->
-            {% for message in get_flashed_messages() %}
-                <div class="flash">{{ message }}</div>
-            {% endfor %}
-            <!-- Overridable main content -->
-            {% block content %}{% endblock %}
-        </main>
-    </body>
+            </details>
+        </nav>
+    </header>
+    <!-- Main content -->
+    <main>
+        <!-- Shows error messages from Python code -->
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+        <!-- Overridable main content -->
+        {% block content %}{% endblock %}
+    </main>
+</body>
 </html>

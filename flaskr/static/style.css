@@ -9,17 +9,11 @@ header {
     gap: 1rem;
     background-color: blue;
     padding: 0.5rem 1rem;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
     color: white;
     text-decoration: none;
 }
 
-.brand img {
+img {
     width: 3rem;
 }
 
@@ -48,11 +42,11 @@ header {
         justify-content: center;
     }
 
-    .brand h1 {
+    h1 {
         font-size: 1.4rem;
     }
 
-    .brand img {
+    img {
         width: 2.3rem;
     }
 
@@ -71,10 +65,11 @@ header {
         padding: 10px 20px;
         border: 1px solid #bbb;
         border-radius: 5px;
-        background: white;
+        background: lightblue;
         cursor: pointer;
         list-style: none;
         font-size: 1.1rem;
+        color: black;
     }
 
     .phone-nav summary::-webkit-details-marker {
