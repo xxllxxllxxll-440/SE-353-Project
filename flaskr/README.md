@@ -62,7 +62,9 @@ Done by running the following in the root of the project:
 flask --app flaskr run --debug
 ```
 
-The terminal should output the link to the server start-page, then add `/hello` to access the Hello World page.
+The terminal should output the link to the server' address.
+
+Use [the Site Directory](/Doc/Site%20Directory.md) to navigate the server.
 
 ## Testing Database Connection
 
