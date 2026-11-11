@@ -73,6 +73,29 @@ You will need to configure your `.env` file within `database/app` first.
 python -c "from database.app import database; print(database.connection_check())"
 ```
 
+## Testing
+
+This website is designed for both a mobile interface as well as a desktop interface.
+
+### Using Responsive Design Testing
+
+Most browsers have support for testing websites with adaptive design. Here is some details on how to do that for the popular browsers:
+
+- [Firefox](https://firefox-source-docs.mozilla.org/devtools-user/responsive_design_mode/)
+- [Chrome, Edge, Opera (most Chromium-based browsers)](https://developer.chrome.com/docs/devtools/device-mode)
+
+### Using External Device
+
+You can also open the site on a different device. Both devices **must** be connected to the same network.
+
+You will need to change the arguments for the command you use to start the server. Use:
+
+```bash
+flask --app flaskr run --debug --host=0.0.0.0
+```
+
+Flask will output two addresses. You will need to use the address that is not the loopback address `127.0.0.1`
+
 ## Stopping the server
 
 Press `Ctrl+C` in the terminal running the server.
