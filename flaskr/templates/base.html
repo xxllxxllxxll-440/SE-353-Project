@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- Overridable title -->
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<!-- CSS import -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+  <h1>Flaskr</h1>
+  <ul>
+    <!-- Displays if user is logged in -->
+    {% if g.user %}
+      <!-- Shows username -->
+      <li><span>{{ g.user['username'] }}</span>
+      <!-- Log out function -->
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+    <!-- Displays if user is not logged in -->
+    {% else %}
+      <!-- Register for account function -->
+      <li><a href="{{ url_for('auth.register') }}">Register</a>
+      <!-- Login function -->
+      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+    {% endif %}
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    <!--- Overridable header -->
+    {% block header %}{% endblock %}
+  </header>
+  <!-- Shows error messages from Python code -->
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  <!-- Overridable main content -->
+  {% block content %}{% endblock %}
+</section>
