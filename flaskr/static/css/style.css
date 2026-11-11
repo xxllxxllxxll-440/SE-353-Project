@@ -1,68 +1,107 @@
-/* Header */
-body header {
-    display:flex;
+body {
+    margin: 8px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     background-color: blue;
-    align-items: center; /* Vertical alignment */
-    justify-content: space-between; /* Pushes nav to the right */
     padding: 0.5rem 1rem;
 }
 
-/* Header logo and title*/
-body header a {
+.brand {
     display: flex;
     align-items: center;
     gap: 1rem;
-    text-decoration: none;
     color: white;
-}
-/* Logo in header */
-body header > a img {
-    width: 3em;
+    text-decoration: none;
 }
 
-/* Navigation list */
-body header nav ul {
-    float: right;
+.brand img {
+    width: 3rem;
+}
+
+.desktop-nav {
     display: flex;
-    gap: 0.5 rem;
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem;
-}
-
-/* Nav list elements (desktop) */
-body header nav ul li a{
-    display: flex;
-    padding: 1em 0.5em;
-    font-size: large;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-    margin: 0;
-}
-
-/* Nav list (mobile) */
-body header nav a{
-    flex-direction: column;
     align-items: center;
+    gap: 0.6rem;
 }
 
-/* Selected Nav list elements (desktop then mobile) */
-body header nav ul li a:hover,
-body header nav a:hover {
-    background-color:darkblue;
+.desktop-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 0;
 }
 
-/* Media queries */
-/* Mobile view */
+.desktop-nav a:hover {
+    text-decoration: underline;
+}
+
+.phone-nav {
+    display: none;
+}
+
 @media screen and (max-width: 949px) {
-    .desktop{
+    header {
+        justify-content: center;
+    }
+
+    .brand h1 {
+        font-size: 1.4rem;
+    }
+
+    .brand img {
+        width: 2.3rem;
+    }
+
+    .desktop-nav {
         display: none;
     }
-}
 
-/* Desktop/Tablet view */
-@media screen and (min-width: 950px) {
-    .mobile{
+    .phone-nav {
+        display: block;
+        margin-top: 14px;
+        text-align: center;
+    }
+
+    .phone-nav summary {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 1px solid #bbb;
+        border-radius: 5px;
+        background: white;
+        cursor: pointer;
+        list-style: none;
+        font-size: 1.1rem;
+    }
+
+    .phone-nav summary::-webkit-details-marker {
         display: none;
+    }
+
+    .mobile-links {
+        width: min(300px, calc(100% - 32px));
+        margin: 12px auto 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        background: white;
+    }
+
+    .mobile-links a {
+        display: block;
+        padding: 12px;
+        color: #111;
+        text-decoration: none;
+    }
+
+    .mobile-links a + a {
+        border-top: 1px solid #ddd;
+    }
+
+    .mobile-links a:hover {
+        background: #f1f1f1;
     }
 }
