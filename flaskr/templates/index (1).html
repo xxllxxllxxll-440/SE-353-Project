@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <a class="brand" href="{{ url_for('main.index') }}">
+            <img src="{{ url_for('static', filename='media/logo.svg') }}" alt="">
+            <h1>Restaurant Manager</h1>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Desktop navigation">
+            <a href="{{ url_for('main.index') }}">Dashboard</a>
+            <a href="#">Financials</a>
+            <a href="#">Inventory</a>
+            <a href="#">Reports</a>
+            <a href="#">Account</a>
+        </nav>
+    </header>
+
+    <nav class="phone-nav" aria-label="Mobile navigation">
+        <details>
+            <summary>☰ Menu</summary>
+            <div class="mobile-links">
+                <a href="{{ url_for('main.index') }}">Dashboard</a>
+                <a href="#">Financials</a>
+                <a href="#">Inventory</a>
+                <a href="#">Reports</a>
+                <a href="#">Account</a>
+            </div>
+        </details>
+    </nav>
+</body>
+</html>
