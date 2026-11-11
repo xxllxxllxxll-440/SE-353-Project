@@ -134,3 +134,15 @@ def logout():
 
     # Redirects to the index of the website
     return redirect(url_for('index'))
+
+# Decorator checks if user is logged in before access website
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        # If not logged in, redirects to login page
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
