@@ -8,7 +8,7 @@ body header {
 }
 
 /* Header logo and title*/
-body header a {
+body header {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -16,7 +16,7 @@ body header a {
     color: white;
 }
 /* Logo in header */
-body header > a img {
+body header > img {
     width: 3em;
 }
 
@@ -38,12 +38,16 @@ body header nav ul li a{
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     margin: 0;
+    text-decoration: none;
+    color: white;
 }
 
 /* Nav list (mobile) */
 body header nav a{
     flex-direction: column;
     align-items: center;
+    text-decoration: none;
+    color: white;
 }
 
 /* Selected Nav list elements (desktop then mobile) */
@@ -52,17 +56,7 @@ body header nav a:hover {
     background-color:darkblue;
 }
 
-/* Media queries */
-/* Mobile view */
-@media screen and (max-width: 949px) {
-    .desktop{
-        display: none;
-    }
-}
-
-/* Desktop/Tablet view */
-@media screen and (min-width: 950px) {
-    .mobile{
-        display: none;
-    }
+/* Main: Spacing from top header */
+body main{
+    margin-top: 2em;
 }
