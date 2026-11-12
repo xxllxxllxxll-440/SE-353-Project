@@ -1,9 +1,31 @@
+from datetime import date
+
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint,
+    render_template
 )
-from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from database.app import database
 
 bp = Blueprint('dashboard', __name__)
+
+# Dashboard at root
+@bp.route('/')
+# Require a logged in user
+@login_required
+def dashboard():
+
+    # Get current month's date range
+    # Provides current date
+    today = date.today()
+    # Finds first day of month
+    start_date = today.replace(day=1)
+    # Sets the end date to today
+    end_date = today
+
+    # Retrieves the dashboard information
+    dashboard_data = database.dashboard(start_date, end_date)
+
+    # Renders HTML page while passing through dashboard data
+    return render_template('dashboard.html', dashboard=dashboard_data)

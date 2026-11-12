@@ -96,7 +96,7 @@ def login():
             # Stores in cookie in browser
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('dashboard'))
 
         flash(error)
 
@@ -132,8 +132,8 @@ def logout():
     # Clears cookies
     session.clear()
 
-    # Redirects to the index of the website
-    return redirect(url_for('index'))
+    # Redirects to the dashboard of the website
+    return redirect(url_for('dashboard'))
 
 # Decorator checks if user is logged in before access website
 def login_required(view):
