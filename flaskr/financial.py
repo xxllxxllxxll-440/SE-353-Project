@@ -13,8 +13,7 @@ from database.app import database
 # Blueprint tied to /financial URLs
 bp = Blueprint('financial', __name__, url_prefix='/financial')
 
-# Initialize error
-error = None
+
 
 # For viewing Financial Records
 # Register view at 
@@ -22,6 +21,10 @@ error = None
 # Require a logged in user
 @login_required
 def dashboard():
+
+    # Initialize error
+    error = None
+
     # If user provides search data
     # Submits the data with POST for searching records
     if request.method == 'POST':
@@ -53,7 +56,8 @@ def dashboard():
             error = "Unknown error"
 
     # Reports errors
-    flash(error)
+    if error is not None:
+        flash(error)
     
     # Renders HTML page will passing through dashboard data
     return render_template('financial/view.html', financial_data = financial_report)
