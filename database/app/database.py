@@ -150,6 +150,7 @@ def financial_transactions(start, end, category=None):
 
     sql = """SELECT * FROM (
             SELECT
+                revenue_id AS transaction_id,
                 revenue_date AS transaction_date,
                 'Revenue' AS transaction_type,
                 source AS category,
@@ -161,6 +162,7 @@ def financial_transactions(start, end, category=None):
             UNION ALL
 
             SELECT
+                e.expense_id AS transaction_id,
                 e.expense_date AS transaction_date,
                 'Expense' AS transaction_type,
                 ec.name AS category,
@@ -174,7 +176,6 @@ def financial_transactions(start, end, category=None):
 
     params = [start, end, start, end]
 
-    # Optional category filter
     if category is not None:
         sql += " WHERE category = %s"
         params.append(category)
