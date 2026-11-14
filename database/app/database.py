@@ -141,6 +141,31 @@ def financial_report(start, end):
          WHERE expense_date BETWEEN %s AND %s) AS net_result""",
         (start, end, start, end, start, end, start, end))
 
+def financial_transactions(start, end):
+    start, end = valid_date(start), valid_date(end)
+    if start > end:
+        raise ValueError("Start date must not be after end date")
+
+    return fetch_all("""SELECT
+            revenue_date AS transaction_date,
+            'Revenue' AS transaction_type,
+            source AS description,
+            amount
+        FROM revenue
+        WHERE revenue_date BETWEEN %s AND %s
+
+        UNION ALL
+
+        SELECT
+            expense_date AS transaction_date,
+            'Expense' AS transaction_type,
+            description,
+            amount
+        FROM expenses
+        WHERE expense_date BETWEEN %s AND %s
+
+        ORDER BY transaction_date DESC""",
+        (start, end, start, end))
 
 def dashboard(start, end):
     totals = financial_report(start, end)
