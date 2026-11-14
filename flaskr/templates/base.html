@@ -43,8 +43,12 @@
                 <div class="mobile-links">
                     <!-- Displays if user is logged in -->
                     {% if g.user %}
-                        <!-- Shows username -->
-                        {{ g.user['username'] }}
+                        <!-- Shows dashboard -->
+                        <a href="{{ url_for('dashboard.dashboard')}}">Dashboard</a>
+
+                        <!-- Shows financial view -->
+                        <a href="{{ url_for('financial.dashboard')}}">Financials</a>
+
                         <!-- Log out function -->
                         <a href="{{ url_for('auth.logout') }}">Log Out</a>
                     <!-- Displays if user is not logged in -->

@@ -81,7 +81,6 @@ main {
     }
 
     .mobile-links {
-        width: min(300px, calc(100% - 32px));
         margin: 12px auto 0;
         border: 1px solid #ddd;
         border-radius: 5px;
