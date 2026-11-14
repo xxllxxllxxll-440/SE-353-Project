@@ -28,8 +28,8 @@ def dashboard():
     # If user provides search data
     # Submits the data with POST for searching records
     if request.method == 'POST':
-        start_date = date.fromisoformat(request.form['startdate'])
-        end_date = date.fromisoformat(request.form['enddate'])
+        start_date = date.fromisoformat(request.form['start_date'])
+        end_date = date.fromisoformat(request.form['end_date'])
 
         # Verify that fields are not empty
         if not start_date:
@@ -51,7 +51,8 @@ def dashboard():
     # Retrieve info from database
     if error is None:
         try:
-            financial_report = database.financial_report(start_date, end_date)
+            financial_total = database.financial_report(start_date, end_date)
+            financial_entries = database.financial_transactions(start_date, end_date)
         except:
             error = "Unknown error"
 
@@ -60,5 +61,7 @@ def dashboard():
         flash(error)
     
     # Renders HTML page will passing through dashboard data
-    return render_template('financial/view.html', financial_data = financial_report)
+    return render_template('financial/view.html',
+                           financial_total = financial_total,
+                           financial_entries = financial_entries)
 
