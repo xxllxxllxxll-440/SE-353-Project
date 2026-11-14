@@ -33,4 +33,8 @@ def create_app(test_config=None):
     # Needed to push dashboard to root of site
     app.add_url_rule('/', endpoint='dashboard')
 
+    # Importing financial blueprint
+    from . import financial
+    app.register_blueprint(financial.bp)
+
     return app

@@ -142,6 +142,61 @@ def financial_report(start, end):
         (start, end, start, end, start, end, start, end))
 
 
+def financial_transactions(start, end, category=None):
+    start, end = valid_date(start), valid_date(end)
+
+    if start > end:
+        raise ValueError("Start date must not be after end date")
+
+    sql = """SELECT * FROM (
+            SELECT
+                revenue_date AS transaction_date,
+                'Revenue' AS transaction_type,
+                source AS category,
+                description,
+                amount
+            FROM revenue
+            WHERE revenue_date BETWEEN %s AND %s
+
+            UNION ALL
+
+            SELECT
+                e.expense_date AS transaction_date,
+                'Expense' AS transaction_type,
+                ec.name AS category,
+                e.description,
+                e.amount
+            FROM expenses e
+            JOIN expense_categories ec
+                ON e.expense_category_id = ec.expense_category_id
+            WHERE e.expense_date BETWEEN %s AND %s
+        ) AS transactions"""
+
+    params = [start, end, start, end]
+
+    # Optional category filter
+    if category is not None:
+        sql += " WHERE category = %s"
+        params.append(category)
+
+    sql += " ORDER BY transaction_date DESC"
+
+    return fetch_all(sql, tuple(params))
+
+# Pulls financial categories for selections.
+def financial_categories():
+    return fetch_all("""SELECT category FROM (
+            SELECT name AS category
+            FROM expense_categories
+
+            UNION
+
+            SELECT DISTINCT source AS category
+            FROM revenue
+        ) AS categories
+        ORDER BY category""")
+
+
 def dashboard(start, end):
     totals = financial_report(start, end)
     counts = fetch_one("""SELECT
