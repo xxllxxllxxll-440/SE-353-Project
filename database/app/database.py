@@ -183,6 +183,19 @@ def financial_transactions(start, end, category=None):
 
     return fetch_all(sql, tuple(params))
 
+# Pulls financial categories for selections.
+def financial_categories():
+    return fetch_all("""SELECT category FROM (
+            SELECT name AS category
+            FROM expense_categories
+
+            UNION
+
+            SELECT DISTINCT source AS category
+            FROM revenue
+        ) AS categories
+        ORDER BY category""")
+
 
 def dashboard(start, end):
     totals = financial_report(start, end)
