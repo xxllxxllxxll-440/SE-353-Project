@@ -141,31 +141,48 @@ def financial_report(start, end):
          WHERE expense_date BETWEEN %s AND %s) AS net_result""",
         (start, end, start, end, start, end, start, end))
 
-def financial_transactions(start, end):
+
+def financial_transactions(start, end, category=None):
     start, end = valid_date(start), valid_date(end)
+
     if start > end:
         raise ValueError("Start date must not be after end date")
 
-    return fetch_all("""SELECT
-            revenue_date AS transaction_date,
-            'Revenue' AS transaction_type,
-            source AS description,
-            amount
-        FROM revenue
-        WHERE revenue_date BETWEEN %s AND %s
+    sql = """SELECT * FROM (
+            SELECT
+                revenue_date AS transaction_date,
+                'Revenue' AS transaction_type,
+                source AS category,
+                description,
+                amount
+            FROM revenue
+            WHERE revenue_date BETWEEN %s AND %s
 
-        UNION ALL
+            UNION ALL
 
-        SELECT
-            expense_date AS transaction_date,
-            'Expense' AS transaction_type,
-            description,
-            amount
-        FROM expenses
-        WHERE expense_date BETWEEN %s AND %s
+            SELECT
+                e.expense_date AS transaction_date,
+                'Expense' AS transaction_type,
+                ec.name AS category,
+                e.description,
+                e.amount
+            FROM expenses e
+            JOIN expense_categories ec
+                ON e.expense_category_id = ec.expense_category_id
+            WHERE e.expense_date BETWEEN %s AND %s
+        ) AS transactions"""
 
-        ORDER BY transaction_date DESC""",
-        (start, end, start, end))
+    params = [start, end, start, end]
+
+    # Optional category filter
+    if category is not None:
+        sql += " WHERE category = %s"
+        params.append(category)
+
+    sql += " ORDER BY transaction_date DESC"
+
+    return fetch_all(sql, tuple(params))
+
 
 def dashboard(start, end):
     totals = financial_report(start, end)
