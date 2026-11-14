@@ -17,8 +17,15 @@
         <nav class="desktop-nav" aria-label="Desktop navigation">
             <!-- Displays if user is logged in -->
             {% if g.user %}
+                <!-- Shows dashboard -->
+                 <a href="{{ url_for('dashboard.dashboard')}}">Dashboard</a>
+
+                <!-- Shows financial view -->
+                 <a href="{{ url_for('financial.dashboard')}}">Financials</a>
+
                 <!-- Shows username -->
                 {{ g.user['username'] }}
+
                 <!-- Log out function -->
                 <a href="{{ url_for('auth.logout') }}">Log Out</a>
             <!-- Displays if user is not logged in -->
