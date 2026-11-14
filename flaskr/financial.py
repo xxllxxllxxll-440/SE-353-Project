@@ -51,8 +51,13 @@ def dashboard():
     # Retrieve info from database
     if error is None:
         try:
+            # Summarizes current range
             financial_total = database.financial_report(start_date, end_date)
+            # Provides all entries within range
             financial_entries = database.financial_transactions(start_date, end_date)
+            # Provides categories
+            categories = database.financial_categories()
+
         except:
             error = "Unknown error"
 
@@ -63,5 +68,8 @@ def dashboard():
     # Renders HTML page will passing through dashboard data
     return render_template('financial/view.html',
                            financial_total = financial_total,
-                           financial_entries = financial_entries)
+                           financial_entries = financial_entries,
+                           categories = categories,
+                           start_date = start_date,
+                           end_date = end_date)
 
