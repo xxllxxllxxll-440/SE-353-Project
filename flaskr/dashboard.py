@@ -35,9 +35,9 @@ def dashboard():
             dashboard_data = database.dashboard(start_date, end_date)
         except:
             error = "Unknown error"
-
-    # Reports error
-    flash(error)
+    else:
+        # Report Error
+        flash(error)
     
     # Renders HTML page while passing through dashboard data
     return render_template('dashboard.html', dashboard=dashboard_data)
