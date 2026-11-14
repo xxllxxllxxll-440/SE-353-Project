@@ -11,14 +11,15 @@ from database.app import database
 
 bp = Blueprint('dashboard', __name__)
 
-# Initialize error
-error = None
+
 
 # Dashboard at root
 @bp.route('/')
 # Require a logged in user
 @login_required
 def dashboard():
+    # Initialize error
+    error = None
 
     # Get current month's date range
     # Provides current date
