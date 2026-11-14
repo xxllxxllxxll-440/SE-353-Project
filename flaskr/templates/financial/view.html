@@ -15,10 +15,26 @@
 
     <form method="post">
       <label for="start_date">Start Date</label>
-      <input type="date" name="start_date" id="start_date" required>
+      <input type="date" name="start_date" id="start_date" value="{{ start_date }}" required>
 
       <label for="end_date">End Date</label>
-      <input type="date" name="end_date" id="end_date" required>
+      <input type="date" name="end_date" id="end_date" value="{{ end_date }}" required>
+
+      <label for="category">Category</label>
+      <select name="category" id="category">
+        <option value="">All Categories</option>
+        <!-- Jinja loop pulling adding categories to drop down -->
+         {% for category in categories %}
+            <option
+                value="{{ category.category }}"
+                {% if selected_category == category.category %}
+                    selected
+                {% endif %}
+            >
+                {{ category.category }}
+            </option>
+            {% endfor %}
+      </select>
 
       <input type="submit" value="Search">
     </form>
@@ -38,7 +54,7 @@
           <tr>
               <th>Date</th>
               <th>Type</th>
-              <th>Description</th>
+              <th>Source and Description</th>
               <th>Amount</th>
           </tr>
       </thead>
