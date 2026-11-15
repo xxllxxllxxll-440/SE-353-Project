@@ -1,71 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Overridable title -->
-    <title>{% block title %}{% endblock %}</title>
-    <!-- CSS import -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8f6">
+    <title>{% block title %}Restaurant Manager{% endblock %} | Restaurant Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='workbench.js') }}"></script>
 </head>
-<body>
-    <header>
-        <img src="{{ url_for('static', filename='logo.svg') }}" alt="">
-        <!-- Overridable header -->
-        {% block header %}{% endblock %}
-
-        <nav class="desktop-nav" aria-label="Desktop navigation">
-            <!-- Displays if user is logged in -->
-            {% if g.user %}
-                <!-- Shows dashboard -->
-                 <a href="{{ url_for('dashboard.dashboard')}}">Dashboard</a>
-
-                <!-- Shows financial view -->
-                 <a href="{{ url_for('financial.dashboard')}}">Financials</a>
-
-                <!-- Shows username -->
-                {{ g.user['username'] }}
-
-                <!-- Log out function -->
-                <a href="{{ url_for('auth.logout') }}">Log Out</a>
-            <!-- Displays if user is not logged in -->
-            {% else %}
-                <!-- Register for account function -->
-                <a href="{{ url_for('auth.register') }}">Register</a>
-                <!-- Login function -->
-                <a href="{{ url_for('auth.login') }}">Log In</a>
-            {% endif %}
-        </nav>
-
-        <nav class="phone-nav" aria-label="Mobile navigation">
-            <details>
-                <summary>☰ Menu</summary>
-                <div class="mobile-links">
-                    <!-- Displays if user is logged in -->
-                    {% if g.user %}
-                        <!-- Shows username -->
-                        {{ g.user['username'] }}
-                        <!-- Log out function -->
-                        <a href="{{ url_for('auth.logout') }}">Log Out</a>
-                    <!-- Displays if user is not logged in -->
-                    {% else %}
-                        <!-- Register for account function -->
-                        <a href="{{ url_for('auth.register') }}">Register</a>
-                        <!-- Login function -->
-                        <a href="{{ url_for('auth.login') }}">Log In</a>
-                    {% endif %}
-                </div>
+<body class="{% if g.user %}workspace{% else %}guest-workspace{% endif %}">
+    {% macro nav_link(endpoint, title, symbol) %}
+        <a class="nav-link {% if request.endpoint == endpoint %}active{% endif %}"
+           href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}>
+            <span class="nav-symbol" aria-hidden="true">{{ symbol }}</span>
+            <span>{{ title }}</span>
+        </a>
+    {% endmacro %}
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('dashboard.dashboard') if g.user else url_for('auth.login') }}">
+            <span class="brandmark" aria-hidden="true">♨</span>
+            <span><strong>Restaurant Manager</strong><small>Inventory &amp; finances</small></span>
+        </a>
+        {% if g.user %}
+            <div class="top-details"><span class="month-pill">{{ current_month }}</span><span class="avatar" title="Signed in as {{ g.user['username'] }}">{{ g.user['username'][:2] | upper }}</span></div>
+            <details class="mobile-menu" id="mobile-menu">
+                <summary aria-label="Toggle section menu"><span aria-hidden="true">☰</span> Menu</summary>
+                <nav class="mobile-nav" aria-label="Mobile and tablet navigation">
+                    <span class="nav-heading">Daily work</span>
+                    {{ nav_link('dashboard.dashboard', 'Dashboard', '▦') }}
+                    {{ nav_link('workbench.purchases', 'Purchase intake', '⇣') }}
+                    {{ nav_link('workbench.inventory', 'Inventory', '▤') }}
+                    {{ nav_link('workbench.suppliers', 'Suppliers', '♧') }}
+                    <span class="nav-heading">Money &amp; reports</span>
+                    {{ nav_link('workbench.revenue', 'Revenue', '↗') }}
+                    {{ nav_link('workbench.expenses', 'Expenses', '↘') }}
+                    {{ nav_link('workbench.reports', 'Reports', '▥') }}
+                    {{ nav_link('financial.view', 'Financial records', '≡') }}
+                    <div class="mobile-divider"></div>
+                    <div class="mobile-signed-in">{{ g.user['username'] }}</div>
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}"><span class="nav-symbol" aria-hidden="true">↪</span> Log out</a>
+                </nav>
             </details>
-        </nav>
+        {% else %}
+            <nav class="guest-links" aria-label="Account navigation"><a href="{{ url_for('auth.login') }}">Log in</a><a href="{{ url_for('auth.register') }}">Register</a></nav>
+        {% endif %}
     </header>
-    <!-- Main content -->
-    <main>
-        <!-- Shows error messages from Python code -->
-        {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
-        {% endfor %}
-        <!-- Overridable main content -->
-        {% block content %}{% endblock %}
-    </main>
+
+    <div class="app-shell">
+        {% if g.user %}
+        <aside class="side-nav" aria-label="Main sections">
+            <div class="nav-heading">Daily work</div>
+            {{ nav_link('dashboard.dashboard', 'Dashboard', '▦') }}
+            {{ nav_link('workbench.purchases', 'Purchase intake', '⇣') }}
+            {{ nav_link('workbench.inventory', 'Inventory', '▤') }}
+            {{ nav_link('workbench.suppliers', 'Suppliers', '♧') }}
+            <div class="nav-heading spaced-heading">Money &amp; reports</div>
+            {{ nav_link('workbench.revenue', 'Revenue', '↗') }}
+            {{ nav_link('workbench.expenses', 'Expenses', '↘') }}
+            {{ nav_link('workbench.reports', 'Reports', '▥') }}
+            {{ nav_link('financial.view', 'Financial records', '≡') }}
+            <div class="sidebar-bottom"><span class="sidebar-user">{{ g.user['username'] }}</span><a href="{{ url_for('auth.logout') }}">Log out</a></div>
+        </aside>
+        {% endif %}
+
+        <main class="content" id="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {% if category == 'success' %}flash-success{% else %}flash-error{% endif %}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+
+
+    </div>
 </body>
 </html>
