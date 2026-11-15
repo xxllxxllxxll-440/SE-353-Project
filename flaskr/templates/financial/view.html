@@ -1,74 +1,63 @@
-<!-- Jinja import -->
 {% extends 'base.html' %}
-
-<!-- Header override -->
-{% block header %}
-    <!-- Title override -->
-  <h1>{% block title %}Financial View{% endblock %}</h1>
-{% endblock %}
-
-<!-- Main override-->
+{% block title %}Financial records{% endblock %}
 {% block content %}
-
-    <!-- Form for searching -->
-    <h1>Search Parameters</h1>
-
-    <form method="post">
-      <label for="start_date">Start Date</label>
-      <input type="date" name="start_date" id="start_date" value="{{ start_date }}" required>
-
-      <label for="end_date">End Date</label>
-      <input type="date" name="end_date" id="end_date" value="{{ end_date }}" required>
-
-      <label for="category">Category</label>
-      <select name="category" id="category">
-        <option value="">All Categories</option>
-        <!-- Jinja loop pulling adding categories to drop down -->
-         {% for category in categories %}
-            <option
-                value="{{ category.category }}"
-                {% if selected_category == category.category %}
-                    selected
-                {% endif %}
-            >
-                {{ category.category }}
-            </option>
-            {% endfor %}
+<div class="page-top">
+  <div>
+    <div class="crumb">Money &amp; reports / Financial records</div>
+    <h1 class="page-title">Financial records</h1>
+    <p class="page-subtitle">Search revenue and expenses by date and category, with a full list of matching transactions.</p>
+  </div>
+  <div class="head-actions">
+    <a class="btn soft" href="{{ url_for('workbench.reports') }}">Summary reports</a>
+    <a class="btn primary" href="{{ url_for('workbench.revenue') }}">+ Record revenue</a>
+  </div>
+</div>
+<section class="panel report-filters">
+  <div class="section-label">▥ &nbsp; Search transactions</div>
+  <form method="get" action="{{ url_for('financial.view') }}" class="report-filter-form">
+    <label class="field">From
+      <input type="date" name="start_date" value="{{ start_date }}" required>
+    </label>
+    <label class="field">To
+      <input type="date" name="end_date" value="{{ end_date }}" required>
+    </label>
+    <label class="field">Category
+      <select name="category">
+        <option value="">All categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+        {% endfor %}
       </select>
-
-      <input type="submit" value="Search">
-    </form>
-
-    <!-- View financial record totals -->
-    <h1>Financial Summary</h1>
-
-    <p>Revenue: ${{ financial_total.revenue_total }}</p>
-    <p>Expense: ${{ financial_total.expense_total }}</p>
-    <p>Net Result: ${{ financial_total.net_result }}</p>
-
-    <!-- View financial records -->
-    <h1>Financial Records</h1>
-    <!-- Table for financial records -->
-    <table>
-      <thead>
-          <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Source and Description</th>
-              <th>Amount</th>
-          </tr>
-      </thead>
-
+    </label>
+    <button class="btn primary" type="submit">Search</button>
+    <a class="btn soft" href="{{ url_for('financial.view') }}">Reset</a>
+  </form>
+</section>
+<div class="metrics report-metrics">
+  <div class="metric"><span class="metric-label">Revenue</span><strong>{{ financial_total.revenue_total | cash }}</strong><small>Selected records</small></div>
+  <div class="metric"><span class="metric-label">Expenses</span><strong>{{ financial_total.expense_total | cash }}</strong><small>Selected records</small></div>
+  <div class="metric"><span class="metric-label">Net result</span><strong>{{ financial_total.net_result | cash }}</strong><small>Revenue minus expenses</small></div>
+  <div class="metric"><span class="metric-label">Matching transactions</span><strong>{{ financial_entries | length }}</strong><small>{{ 'All categories' if not selected_category else selected_category }}</small></div>
+</div>
+<section class="panel">
+  <div class="head-row"><h2>Transaction history</h2><span class="muted-text">{{ start_date }} to {{ end_date }}</span></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Source / description</th><th>Amount</th></tr></thead>
       <tbody>
-          {% for transaction in financial_entries %}
+        {% for row in financial_entries %}
           <tr>
-              <td>{{ transaction.transaction_date }}</td>
-              <td>{{ transaction.transaction_type }}</td>
-              <td>{{ transaction.description }}</td>
-              <td>{{ transaction.amount }}</td>
+            <td>{{ row.transaction_date }}</td>
+            <td><span class="status {% if row.transaction_type == 'Expense' %}is-low{% endif %}">{{ row.transaction_type }}</span></td>
+            <td>{{ row.category }}</td>
+            <td>{{ row.description or '—' }}</td>
+            <td class="{{ 'positive' if row.transaction_type == 'Revenue' else 'negative' }}"><strong>{{ row.amount | cash }}</strong></td>
           </tr>
-          {% endfor %}
+        {% else %}
+          <tr><td colspan="5">No transactions found for these filters. Try a different date range or add records using Revenue / Expenses.</td></tr>
+        {% endfor %}
       </tbody>
     </table>
-
+  </div>
+</section>
 {% endblock %}
