@@ -197,6 +197,13 @@ def financial_categories():
         ) AS categories
         ORDER BY category""")
 
+# Pulls expense categories and their IDs for expense selections.
+def expense_categories():
+    return fetch_all("""
+        SELECT expense_category_id, name
+        FROM expense_categories
+        ORDER BY name
+    """)
 
 def dashboard(start, end):
     totals = financial_report(start, end)
