@@ -1,75 +1,71 @@
+"""Transaction history page contributed in the latest team project.
+
+Keeps /financial/view while using the shared Shift Workbench layout.
+Filters are read-only GET parameters, not database changes.
+"""
 from datetime import date
+from decimal import Decimal
 
-from flask import (
-    Blueprint,
-    flash,
-    render_template,
-    request
-)
+from flask import Blueprint, current_app, flash, render_template, request
+from mysql.connector import Error as DatabaseError
 
-from flaskr.auth import login_required
 from database.app import database
+from flaskr.auth import login_required
 
-# Blueprint tied to /financial URLs
 bp = Blueprint('financial', __name__, url_prefix='/financial')
 
 
-
-# For viewing Financial Records
-# Register view at 
-@bp.route('/view', methods=('GET', 'POST'))
-# Require a logged in user
+@bp.route('/view', methods=['GET'])
 @login_required
-def dashboard():
-
-    # Initialize error
+def view():
+    today = date.today()
+    start_date = today.replace(day=1)
+    end_date = today
+    category = request.args.get('category', '').strip()
     error = None
+    categories = []
+    entries = []
+    totals = {'revenue_total': Decimal('0.00'),
+              'expense_total': Decimal('0.00'),
+              'net_result': Decimal('0.00')}
 
-    # If user provides search data
-    # Submits the data with POST for searching records
-    if request.method == 'POST':
-        start_date = date.fromisoformat(request.form['start_date'])
-        end_date = date.fromisoformat(request.form['end_date'])
+    try:
+        if request.args.get('start_date'):
+            start_date = date.fromisoformat(request.args['start_date'])
+        if request.args.get('end_date'):
+            end_date = date.fromisoformat(request.args['end_date'])
+        if start_date > end_date:
+            raise ValueError('The start date must be before or equal to the end date.')
+    except (ValueError, OverflowError):
+        error = 'Please choose a valid date range.'
+        start_date, end_date = today.replace(day=1), today
 
-        # Verify that fields are not empty
-        if not start_date:
-            error = 'Start date is required.'
-        elif not end_date:
-            error = 'End date is required.'
+    try:
+        categories = database.financial_categories()
+        allowed_categories = {row['category'] for row in categories}
+        if category and category not in allowed_categories:
+            error = 'Please select a category from the list.'
+            category = ''
+        entries = database.financial_transactions(start_date, end_date,
+                                                   category or None)
+        if category:
+            # Unlike the old page, the summary also respects the category choice.
+            revenue = sum((Decimal(str(row['amount'])) for row in entries
+                           if row['transaction_type'] == 'Revenue'), Decimal('0.00'))
+            expense = sum((Decimal(str(row['amount'])) for row in entries
+                           if row['transaction_type'] == 'Expense'), Decimal('0.00'))
+            totals = {'revenue_total': revenue, 'expense_total': expense,
+                      'net_result': revenue-expense}
+        else:
+            totals = database.financial_report(start_date, end_date)
+    except (DatabaseError, RuntimeError, ValueError, TypeError, KeyError):
+        current_app.logger.exception('Could not load financial records')
+        error = 'Financial records could not be loaded. Check your database connection.'
 
-
-    # If user doesn't provide search data (first load)
-    if request.method == "GET":
-        # Get current month's date range
-        # Provides current date
-        today = date.today()
-        # Finds first day of month
-        start_date = today.replace(day=1)
-        # Sets the end date to today
-        end_date = today
-
-    # Retrieve info from database
-    if error is None:
-        try:
-            # Summarizes current range
-            financial_total = database.financial_report(start_date, end_date)
-            # Provides all entries within range
-            financial_entries = database.financial_transactions(start_date, end_date)
-            # Provides categories
-            categories = database.financial_categories()
-
-        except:
-            error = "Unknown error"
-
-    # Reports errors
-    if error is not None:
-        flash(error)
-    
-    # Renders HTML page will passing through dashboard data
-    return render_template('financial/view.html',
-                           financial_total = financial_total,
-                           financial_entries = financial_entries,
-                           categories = categories,
-                           start_date = start_date,
-                           end_date = end_date)
-
+    if error:
+        flash(error, 'error')
+    return render_template('financial/view.html', financial_total=totals,
+                           financial_entries=entries, categories=categories,
+                           selected_category=category,
+                           start_date=start_date.isoformat(),
+                           end_date=end_date.isoformat())
