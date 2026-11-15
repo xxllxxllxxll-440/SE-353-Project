@@ -1,0 +1,26 @@
+<!-- Jinja import -->
+{% extends 'base.html' %}
+
+<!-- Header override -->
+{% block header %}
+    <!-- Title override -->
+  <h1>{% block title %}Modify Expense Record{% endblock %}</h1>
+{% endblock %}
+
+<!-- Main override-->
+{% block content %}
+    <!-- Required prevents browser form submitting until all fields are entered-->
+  <form method="post">
+    <label for="category">Category</label>
+      <select name="category" id="category">
+        <!-- Jinja loop for options -->
+         {% for category in categories %}
+            <option value="{{ category.expense_category_id }}">
+                {{ category.name}}
+            </option>
+         {% endfor %}
+      </select>
+
+    <input type="submit" value="Register">
+  </form>
+{% endblock %}

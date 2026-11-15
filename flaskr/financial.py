@@ -73,3 +73,33 @@ def dashboard():
                            start_date = start_date,
                            end_date = end_date)
 
+# For editing / creating expenses
+@bp.route('/expense', methods=('GET', 'POST'))
+# Require a logged in user
+@login_required
+def modify():
+
+    # Initialize error
+    error = None
+
+    # Pull expense categories with IDs
+    categories = database.expense_categories()
+
+    # When user submits the data with post
+    if request.method == 'POST':
+        category = request.form['category']
+        expense_date = date.fromisoformat(request.form['expense_date'])
+        amount = request.form['amount']
+        description = request.form['description']
+
+        # Validate that required fields are not empty
+        if not description:
+            error = "Description is required."
+        elif not amount:
+            error = "Amount is required."
+        elif not expense_date:
+            error = "Date is required."
+
+    # Renders the HTML for the website
+    return render_template('financial/expense.html',
+                           categories=categories)
