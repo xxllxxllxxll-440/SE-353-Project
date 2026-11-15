@@ -1,1 +1,11 @@
-
+{% extends 'base.html' %}
+{% block title %}Expenses{% endblock %}
+{% block content %}
+<div class="page-top"><div><div class="crumb">Money &amp; reports / Expenses</div><h1 class="page-title">Expenses</h1><p class="page-subtitle">Record utilities, repairs, and other restaurant costs.</p></div><div class="head-actions"><a class="btn soft" href="{{ url_for('workbench.reports') }}">See reports</a></div></div>
+<div class="form-layout"><section class="panel"><div class="section-label">↘ &nbsp; Money going out</div><h2>Add an expense</h2><form method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><div class="form-grid">
+<label class="field">Category *<select name="expense_category_id" required><option value="">Choose a category</option>{% for category in categories %}<option value="{{ category.expense_category_id }}">{{ category.name }}</option>{% endfor %}</select></label>
+<label class="field">Date *<input type="date" name="expense_date" value="{{ today }}" required></label>
+<label class="field">Amount ($) *<input type="number" name="amount" min="0.01" step="0.01" placeholder="0.00" required></label>
+<label class="field">Description *<input name="description" type="text" maxlength="255" placeholder="What was the expense for?" required></label>
+</div><div class="form-total"><div><small>Expenses this month</small><strong>{{ totals.expense_total | cash }}</strong></div><button class="btn primary" type="submit" {% if not categories %}disabled{% endif %}>Save expense</button></div></form></section></div>
+{% endblock %}
