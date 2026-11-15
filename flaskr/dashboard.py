@@ -1,43 +1,29 @@
+"""Current-month summary for the Shift Workbench dashboard."""
 from datetime import date
 
-from flask import (
-    Blueprint,
-    flash,
-    render_template
-)
+from flask import Blueprint, current_app, flash, render_template
+from mysql.connector import Error as DatabaseError
 
-from flaskr.auth import login_required
 from database.app import database
+from flaskr.auth import login_required
+from flaskr.workbench import recent_activity
 
 bp = Blueprint('dashboard', __name__)
 
 
-
-# Dashboard at root
 @bp.route('/')
-# Require a logged in user
 @login_required
 def dashboard():
-    # Initialize error
-    error = None
-
-    # Get current month's date range
-    # Provides current date
     today = date.today()
-    # Finds first day of month
-    start_date = today.replace(day=1)
-    # Sets the end date to today
-    end_date = today
-
-    # Retrieves the dashboard information
-    if error is None:
-        try:
-            dashboard_data = database.dashboard(start_date, end_date)
-        except:
-            error = "Unknown error"
-    else:
-        # Report Error
-        flash(error)
-    
-    # Renders HTML page while passing through dashboard data
-    return render_template('dashboard.html', dashboard=dashboard_data)
+    monthly = {'revenue_total': 0, 'expense_total': 0, 'net_result': 0,
+               'inventory_count': 0, 'low_stock_count': 0, 'vendor_count': 0}
+    alerts, activity = [], []
+    try:
+        monthly = database.dashboard(today.replace(day=1), today)
+        alerts = database.low_stock()[:5]
+        activity = recent_activity(5)
+    except (DatabaseError, RuntimeError, ValueError, TypeError, KeyError):
+        current_app.logger.exception('Dashboard data could not be loaded')
+        flash('Some dashboard data could not be loaded. Check the database connection.', 'error')
+    return render_template('dashboard.html', dashboard=monthly,
+                           low_stock=alerts, activity=activity)
