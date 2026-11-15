@@ -10,6 +10,7 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from database.app import database
+from flaskr.security import check_csrf
 
 # Blueprint tied to /auth URLs
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -20,6 +21,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     # Submits the data with POST
     if request.method == 'POST':
+        check_csrf()
         username = request.form['username']
         password = request.form['password']
 
@@ -67,6 +69,7 @@ def register():
 def login():
     # Receive user and password data
     if request.method == 'POST':
+        check_csrf()
         username = request.form['username']
         password = request.form['password']
 
@@ -96,9 +99,8 @@ def login():
             # Stores in cookie in browser
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('dashboard.dashboard'))
 
-        # Reports errors
         flash(error)
 
     # Renders HTML for login page
@@ -134,7 +136,7 @@ def logout():
     session.clear()
 
     # Redirects to the dashboard of the website
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('dashboard.dashboard'))
 
 # Decorator checks if user is logged in before access website
 def login_required(view):
