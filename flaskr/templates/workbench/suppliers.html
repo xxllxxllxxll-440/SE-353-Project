@@ -1,1 +1,8 @@
-
+{% extends 'base.html' %}
+{% block title %}Suppliers{% endblock %}
+{% block content %}
+<div class="page-top"><div><div class="crumb">Daily work / Suppliers</div><h1 class="page-title">Suppliers</h1><p class="page-subtitle">Look up the businesses that provide your ingredients and supplies.</p></div><div class="head-actions"><a class="btn primary" href="{{ url_for('workbench.purchases') }}">+ Record purchase</a></div></div>
+<section class="panel"><h2>Supplier directory</h2><p class="helper">Active suppliers from the restaurant database.</p>
+{% for supplier in suppliers %}<div class="supplier-row"><span class="supplier-icon" aria-hidden="true">{{ supplier.name[:1] | upper }}</span><div class="supplier-info"><strong>{{ supplier.name }}</strong><small>{{ supplier.email or 'No email on file' }}</small></div><span class="supplier-phone">{{ supplier.phone or 'No phone on file' }}</span></div>{% else %}<p class="helper">No suppliers found. Add them using your database setup before recording purchases.</p>{% endfor %}
+</section>
+{% endblock %}
