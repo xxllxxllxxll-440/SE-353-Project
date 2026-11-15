@@ -9,3 +9,5 @@
 `/` Dashboard (Home) page (will route to login if not signed in)
 
 `/financial/view` Page to view financial records (will route to login if not signed in)
+
+`/financial/expense` Page to edit or create expenses (will route to login if not signed in)
