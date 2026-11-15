@@ -1,20 +1,5 @@
-<!-- Jinja import -->
 {% extends 'base.html' %}
-
-<!-- Header override -->
-{% block header %}
-    <!-- Title override -->
-  <h1>{% block title %}Register{% endblock %}</h1>
-{% endblock %}
-
-<!-- Main override-->
+{% block title %}Register{% endblock %}
 {% block content %}
-    <!-- Required prevents browser form submitting until all fields are entered-->
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<section class="auth-card panel"><div class="section-label">Restaurant Manager</div><h1 class="page-title">Create account</h1><p class="page-subtitle">Set up a login to access the staff workbench.</p><form method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><label class="field">Username<input name="username" autocomplete="username" required></label><label class="field">Password<input type="password" name="password" autocomplete="new-password" required></label><button class="btn primary auth-submit" type="submit">Register</button></form><p class="auth-footer">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p></section>
 {% endblock %}
