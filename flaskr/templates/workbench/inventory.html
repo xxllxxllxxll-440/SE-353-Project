@@ -1,1 +1,10 @@
-
+{% extends 'base.html' %}
+{% block title %}Inventory{% endblock %}
+{% block content %}
+<div class="page-top"><div><div class="crumb">Daily work / Inventory</div><h1 class="page-title">Inventory</h1><p class="page-subtitle">Find ingredients and supplies, check quantities, and catch low stock early.</p></div><div class="head-actions"><a class="btn primary" href="{{ url_for('workbench.purchases') }}">+ Record delivery</a></div></div>
+<section class="panel"><div class="head-row"><div><h2>Stock on hand</h2><p class="helper">Updated from your connected restaurant database.</p></div></div>
+    <form class="inventory-filters" method="get"><label class="sr-only" for="inventory-search">Search inventory</label><input id="inventory-search" type="search" name="q" value="{{ search }}" placeholder="Search name, category, vendor…"><label class="check-option"><input type="checkbox" name="low" value="1" {% if low_only %}checked{% endif %}> Low-stock only</label><button class="btn soft" type="submit">Filter items</button><a class="btn" href="{{ url_for('workbench.inventory') }}">Clear</a></form>
+    <div class="table-wrap"><table class="data-table"><thead><tr><th>Item</th><th>Category</th><th>On hand</th><th>Reorder at</th><th>Supplier</th><th>Status</th><th></th></tr></thead><tbody>
+      {% for item in items %}<tr><td><strong>{{ item.name }}</strong><small>{{ item.sku }}</small></td><td>{{ item.category }}</td><td>{{ item.quantity_on_hand }} {{ item.unit }}</td><td>{{ item.reorder_level }} {{ item.unit }}</td><td>{{ item.preferred_vendor or '—' }}</td><td><span class="status {% if item.stock_status == 'LOW' %}is-low{% endif %}">{{ 'Low stock' if item.stock_status == 'LOW' else 'In stock' }}</span></td><td><a class="table-action" href="{{ url_for('workbench.purchases', item_id=item.item_id) }}">Restock</a></td></tr>{% else %}<tr><td colspan="7">No items match these filters.</td></tr>{% endfor %}
+    </tbody></table></div><p class="table-caption">{{ items|length }} items shown</p></section>
+{% endblock %}
