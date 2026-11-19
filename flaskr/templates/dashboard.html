@@ -1,19 +1,89 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="page-top"><div><div class="crumb">Overview / Dashboard</div><h1 class="page-title">Dashboard</h1><p class="page-subtitle">{{ current_month }} overview</p></div><div class="head-actions"><a class="btn soft" href="{{ url_for('workbench.inventory') }}">View stock</a><a class="btn primary" href="{{ url_for('workbench.purchases') }}">+ Record purchase</a></div></div>
-<div class="metrics">
-    <div class="metric"><span class="metric-label">Revenue this month <b>↗</b></span><strong>{{ dashboard.revenue_total | cash }}</strong><small>Recorded income · {{ current_month }}</small></div>
-    <div class="metric"><span class="metric-label">Expenses this month <b>↘</b></span><strong>{{ dashboard.expense_total | cash }}</strong><small>Purchases and other costs</small></div>
-    <div class="metric"><span class="metric-label">Net result <b>✓</b></span><strong>{{ dashboard.net_result | cash }}</strong><small>Revenue minus expenses</small></div>
-    <div class="metric warning"><span class="metric-label">Stock alerts <b>⚠</b></span><strong>{{ dashboard.low_stock_count }} item{{ '' if dashboard.low_stock_count == 1 else 's' }}</strong><small>At or below reorder level</small></div>
+<div class="page-top">
+    <div>
+        <div class="crumb">Overview / Dashboard</div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">{{ current_month }} overview</p>
+    </div>
+    <div class="head-actions">
+        <a class="btn soft" href="{{ url_for('workbench.inventory') }}">View stock</a>
+        <a class="btn primary" href="{{ url_for('workbench.purchases') }}">+ Record purchase</a>
+    </div>
 </div>
-<div class="dashboard-grid"><section class="panel"><div class="section-label">▦ &nbsp; Operations</div><h2>Quick actions</h2>
-    <div class="quick-actions"><a class="action-card" href="{{ url_for('workbench.purchases') }}"><span class="action-icon">⇣</span><strong>Record purchase</strong><small>Add a delivery and its cost</small></a><a class="action-card" href="{{ url_for('workbench.inventory') }}"><span class="action-icon">▤</span><strong>Check inventory</strong><small>See quantities and low stock</small></a><a class="action-card" href="{{ url_for('workbench.revenue') }}"><span class="action-icon">↗</span><strong>Enter sales</strong><small>Add this shift's revenue</small></a></div>
-    <div class="head-row activity-heading"><h3>Recent activity</h3><a class="btn soft small" href="{{ url_for('financial.view') }}">View transactions</a></div>
-    {% for row in activity %}<div class="activity-item"><span class="activity-symbol" aria-hidden="true">{{ '↗' if row.activity_type == 'REVENUE' else '↘' }}</span><div class="activity-info"><strong>{{ row.description }}</strong><small>{{ row.activity_date }} · {{ 'Revenue' if row.activity_type == 'REVENUE' else 'Expense' }}</small></div><b class="{{ 'positive' if row.activity_type == 'REVENUE' else 'negative' }}">{{ '+' if row.activity_type == 'REVENUE' else '−' }}{{ row.amount | cash }}</b></div>{% else %}<p class="helper">No recent financial transactions yet.</p>{% endfor %}
-</section><section class="panel"><div class="head-row"><h2>Needs attention</h2><span class="badge">{{ dashboard.low_stock_count }} low-stock</span></div>
-    {% for item in low_stock %}<div class="stock-row"><span class="stock-icon" aria-hidden="true">!</span><div class="stock-name"><strong>{{ item.item_name }}</strong><small>{{ item.vendor_name or 'No supplier set' }}</small></div><div class="stock-qty">{{ item.quantity_on_hand }} {{ item.unit }}<small>Reorder at {{ item.reorder_level }}</small></div></div>{% else %}<p class="helper">Everything is stocked above its reorder level.</p>{% endfor %}
+<div class="metrics">
+    <div class="metric">
+        <span class="metric-label">Revenue this month <b>↗</b></span>
+        <strong>{{ dashboard.revenue_total | cash }}</strong>
+        <small>Recorded income · {{ current_month }}</small>
+    </div>
+    <div class="metric">
+        <span class="metric-label">Expenses this month <b>↘</b></span>
+        <strong>{{ dashboard.expense_total | cash }}</strong>
+        <small>Purchases and other costs</small>
+    </div>
+    <div class="metric">
+        <span class="metric-label">Net result <b>✓</b></span>
+        <strong>{{ dashboard.net_result | cash }}</strong>
+        <small>Revenue minus expenses</small>
+    </div>
+    <div class="metric warning">
+        <span class="metric-label">Stock alerts <b>⚠</b></span>
+        <strong>{{ dashboard.low_stock_count }} item{{ '' if dashboard.low_stock_count == 1 else 's' }}</strong>
+        <small>At or below reorder level</small>
+    </div>
+</div>
 
+<div class="dashboard-grid">
+    <section class="panel">
+        <div class="section-label">▦ &nbsp; Operations</div>
+        <h2>Quick actions</h2>
+    <div class="quick-actions">
+        <a class="action-card" href="{{ url_for('workbench.purchases') }}">
+            <span class="action-icon">⇣</span><strong>Record purchase</strong><small>Add a delivery and its cost</small>
+        </a>
+        <a class="action-card" href="{{ url_for('workbench.inventory') }}">
+            <span class="action-icon">▤</span><strong>Check inventory</strong><small>See quantities and low stock</small>
+        </a>
+        <a class="action-card" href="{{ url_for('workbench.revenue') }}">
+            <span class="action-icon">↗</span><strong>Enter sales</strong><small>Add this shift's revenue</small>
+        </a>
+    </div>
+    <div class="head-row activity-heading">
+        <h3>Recent activity</h3>
+        <a class="btn soft small" href="{{ url_for('financial.view') }}">View transactions</a>
+    </div>
+    {% for row in activity %}
+        <div class="activity-item">
+            <span class="activity-symbol" aria-hidden="true">{{ '↗' if row.activity_type == 'REVENUE' else '↘' }}</span>
+            <div class="activity-info">
+                <strong>{{ row.description }}</strong>
+                <small>{{ row.activity_date }} · {{ 'Revenue' if row.activity_type == 'REVENUE' else 'Expense' }}</small>
+            </div>
+            <b class="{{ 'positive' if row.activity_type == 'REVENUE' else 'negative' }}">{{ '+' if row.activity_type == 'REVENUE' else '−' }}{{ row.amount | cash }}</b>
+        </div>
+    {% else %}
+        <p class="helper">No recent financial transactions yet.</p>
+    {% endfor %}
+</section>
+<section class="panel">
+    <div class="head-row">
+        <h2>Needs attention</h2>
+        <span class="badge">{{ dashboard.low_stock_count }} low-stock</span>
+    </div>
+    {% for item in low_stock %}
+        <div class="stock-row">
+            <span class="stock-icon" aria-hidden="true">!</span>
+            <div class="stock-name">
+                <strong>{{ item.item_name }}</strong><small>{{ item.vendor_name or 'No supplier set' }}</small>
+            </div>
+            <div class="stock-qty">
+                {{ item.quantity_on_hand }} {{ item.unit }}<small>Reorder at {{ item.reorder_level }}</small>
+            </div>
+        </div>
+    {% else %}
+        <p class="helper">Everything is stocked above its reorder level.</p>
+    {% endfor %}
 </section></div>
 {% endblock %}
