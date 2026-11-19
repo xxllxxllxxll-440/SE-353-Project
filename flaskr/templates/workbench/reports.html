@@ -1,8 +1,81 @@
 {% extends 'base.html' %}
 {% block title %}Reports{% endblock %}
 {% block content %}
-<div class="page-top"><div><div class="crumb">Money &amp; reports / Reports</div><h1 class="page-title">Financial reports</h1><p class="page-subtitle">See how the restaurant is doing across a chosen date range.</p></div><div class="head-actions"><a class="btn soft" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></div></div>
-<section class="panel report-filters"><form method="get" class="report-filter-form"><label class="field">From<input name="start" type="date" value="{{ start }}" required></label><label class="field">To<input name="end" type="date" value="{{ end }}" required></label><button class="btn primary" type="submit">Update report</button></form></section>
-<div class="metrics report-metrics"><div class="metric"><span class="metric-label">Revenue</span><strong>{{ totals.revenue_total | cash }}</strong><small>Selected date range</small></div><div class="metric"><span class="metric-label">Expenses</span><strong>{{ totals.expense_total | cash }}</strong><small>Selected date range</small></div><div class="metric"><span class="metric-label">Net result</span><strong>{{ totals.net_result | cash }}</strong><small>Revenue minus expenses</small></div><div class="metric warning"><span class="metric-label">Stock alerts</span><strong>{{ low_stock|length }} item{{ '' if low_stock|length == 1 else 's' }}</strong><small>Currently below reorder level</small></div></div>
-<section class="panel"><div class="head-row"><h2>Recent financial activity</h2><span class="muted-text">Latest 15 transactions (all dates)</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th></tr></thead><tbody>{% for row in activity %}<tr><td>{{ row.activity_date }}</td><td><span class="status {% if row.activity_type == 'EXPENSE' %}is-low{% endif %}">{{ 'Revenue' if row.activity_type == 'REVENUE' else 'Expense' }}</span></td><td>{{ row.description }}</td><td class="{{ 'positive' if row.activity_type == 'REVENUE' else 'negative' }}"><strong>{{ row.amount | cash }}</strong></td></tr>{% else %}<tr><td colspan="4">No transactions recorded yet.</td></tr>{% endfor %}</tbody></table></div></section>
+<div class="page-top">
+    <div>
+        <div class="crumb">Money &amp; reports / Reports</div>
+        <h1 class="page-title">Financial reports</h1>
+        <p class="page-subtitle">See how the restaurant is doing across a chosen date range.</p>
+    </div>
+    <div class="head-actions">
+        <a class="btn soft" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+    </div>
+</div>
+<section class="panel report-filters">
+    <form method="get" class="report-filter-form">
+        <label class="field">From<input name="start" type="date" value="{{ start }}" required></label>
+
+        <label class="field">To<input name="end" type="date" value="{{ end }}" required></label>
+        <button class="btn primary" type="submit">Update report</button>
+    </form>
+</section>
+
+<div class="metrics report-metrics">
+    <div class="metric">
+        <span class="metric-label">Revenue</span>
+        <strong>{{ totals.revenue_total | cash }}</strong>
+        <small>Selected date range</small>
+    </div>
+
+    <div class="metric">
+        <span class="metric-label">Expenses</span>
+        <strong>{{ totals.expense_total | cash }}</strong>
+        <small>Selected date range</small>
+    </div>
+
+    <div class="metric">
+        <span class="metric-label">Net result</span>
+        <strong>{{ totals.net_result | cash }}</strong>
+        <small>Revenue minus expenses</small>
+    </div>
+
+    <div class="metric warning">
+        <span class="metric-label">Stock alerts</span>
+        <strong>{{ low_stock|length }} item{{ '' if low_stock|length == 1 else 's' }}</strong>
+        <small>Currently below reorder level</small>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="head-row">
+        <h2>Recent financial activity</h2>
+        <span class="muted-text">Latest 15 transactions (all dates)</span>
+    </div>
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in activity %}
+                    <tr>
+                        <td>{{ row.activity_date }}</td>
+                        <td><span class="status {% if row.activity_type == 'EXPENSE' %}is-low{% endif %}">{{ 'Revenue' if row.activity_type == 'REVENUE' else 'Expense' }}</span></td>
+                        <td>{{ row.description }}</td>
+                        <td class="{{ 'positive' if row.activity_type == 'REVENUE' else 'negative' }}"><strong>{{ row.amount | cash }}</strong></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No transactions recorded yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 {% endblock %}

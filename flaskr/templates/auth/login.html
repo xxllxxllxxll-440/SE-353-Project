@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 {% block title %}Log in{% endblock %}
 {% block content %}
-<section class="auth-card panel"><div class="section-label">Restaurant Manager</div><h1 class="page-title">Welcome back</h1><p class="page-subtitle">Log in to open your restaurant workbench.</p><form method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><label class="field">Username<input name="username" autocomplete="username" required></label><label class="field">Password<input type="password" name="password" autocomplete="current-password" required></label><button class="btn primary auth-submit" type="submit">Log in</button></form><p class="auth-footer">New to this project? <a href="{{ url_for('auth.register') }}">Create an account</a></p></section>
+<section class="auth-card panel">
+    <div class="section-label">Restaurant Manager</div>
+    <h1 class="page-title">Welcome back</h1>
+    <p class="page-subtitle">Log in to open your restaurant workbench.</p>
+    <form method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <label class="field">Username
+            <input name="username" autocomplete="username" required>
+        </label>
+
+        <label class="field">Password
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+
+        <button class="btn primary auth-submit" type="submit">Log in</button>
+    </form>
+
+    <p class="auth-footer">New to this project? <a href="{{ url_for('auth.register') }}">Create an account</a></p></section>
 {% endblock %}

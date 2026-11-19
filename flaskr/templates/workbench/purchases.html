@@ -1,17 +1,83 @@
 {% extends 'base.html' %}
 {% block title %}Purchase intake{% endblock %}
 {% block content %}
-<div class="page-top"><div><div class="crumb">Daily work / Purchase intake</div><h1 class="page-title">Record a delivery</h1><p class="page-subtitle">Enter incoming stock and the invoice once. Inventory and expenses update together.</p></div></div>
-<div class="form-layout"><section class="panel"><div class="section-label">⇣ &nbsp; Purchase intake</div><h2>Supplier delivery</h2><p class="helper">All fields marked * are required. You can enter multiple items on one invoice.</p>
-    {% if not vendors or not items %}<div class="flash flash-error" role="alert">Add at least one active supplier and inventory item before recording purchases.</div>{% endif %}
-    <form id="purchase-form" method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><div class="form-grid">
-      <label class="field">Supplier *<select name="vendor_id" required><option value="">Choose a supplier</option>{% for vendor in vendors %}<option value="{{ vendor.vendor_id }}">{{ vendor.name }}</option>{% endfor %}</select></label>
-      <label class="field">Delivery date *<input name="purchase_date" type="date" value="{{ today }}" required></label>
-      <label class="field">Invoice number *<input name="invoice_number" required maxlength="80" placeholder="e.g. INV-1025"></label>
-      <label class="field">Notes (optional)<input name="notes" maxlength="255" placeholder="Delivery notes"></label>
-    </div><div class="line-items-header"><h3>Items received</h3><button class="btn soft small" id="add-purchase-line" type="button">+ Add item</button></div>
-    <div id="purchase-lines"><div class="purchase-line"><label class="field item-field">Inventory item *<select name="item_id" required><option value="">Choose an item</option>{% for item in items %}<option value="{{ item.item_id }}" {% if request.args.get('item_id') == item.item_id|string %}selected{% endif %}>{{ item.name }} ({{ item.unit }})</option>{% endfor %}</select></label><label class="field">Quantity *<input name="quantity" type="number" min="0.01" step="0.01" required placeholder="0"></label><label class="field">Unit cost ($) *<input name="unit_cost" type="number" min="0" step="0.01" required placeholder="0.00"></label><button class="remove-line" type="button" aria-label="Remove item">×</button></div></div>
-    <div class="form-total"><div><small>Estimated invoice total</small><strong id="purchase-estimate">$0.00</strong></div><button class="btn primary" type="submit" {% if not vendors or not items %}disabled{% endif %}>Save purchase</button></div>
+<div class="page-top">
+  <div>
+    <div class="crumb">Daily work / Purchase intake</div>
+    <h1 class="page-title">Record a delivery</h1>
+    <p class="page-subtitle">Enter incoming stock and the invoice once. Inventory and expenses update together.</p>
+  </div>
+</div>
+<div class="form-layout">
+  <section class="panel">
+    <div class="section-label">⇣ &nbsp; Purchase intake</div>
+    <h2>Supplier delivery</h2>
+    <p class="helper">All fields marked * are required. You can enter multiple items on one invoice.</p>
+    {% if not vendors or not items %}
+      <div class="flash flash-error" role="alert">Add at least one active supplier and inventory item before recording purchases.</div>
+    {% endif %}
+    <form id="purchase-form" method="post">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <div class="form-grid">
+        <label class="field">Supplier *
+          <select name="vendor_id" required>
+            <option value="">Choose a supplier</option>
+            {% for vendor in vendors %}
+              <option value="{{ vendor.vendor_id }}">{{ vendor.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label class="field">Delivery date *
+          <input name="purchase_date" type="date" value="{{ today }}" required>
+        </label>
+
+        <label class="field">Invoice number *
+          <input name="invoice_number" required maxlength="80" placeholder="e.g. INV-1025">
+        </label>
+
+        <label class="field">Notes (optional)
+          <input name="notes" maxlength="255" placeholder="Delivery notes">
+        </label>
+      </div>
+
+      <div class="line-items-header">
+        <h3>Items received</h3>
+        <button class="btn soft small" id="add-purchase-line" type="button">+ Add item</button>
+      </div>
+
+      <div id="purchase-lines">
+        <div class="purchase-line">
+          <label class="field item-field">Inventory item *
+            <select name="item_id" required>
+              <option value="">Choose an item</option>
+
+              {% for item in items %}
+                <option value="{{ item.item_id }}" {% if request.args.get('item_id') == item.item_id|string %}selected{% endif %}>{{ item.name }} ({{ item.unit }})</option>
+              {% endfor %}
+            </select>
+
+          </label>
+          <label class="field">Quantity *
+            <input name="quantity" type="number" min="0.01" step="0.01" required placeholder="0">
+          </label>
+
+          <label class="field">Unit cost ($) *
+            <input name="unit_cost" type="number" min="0" step="0.01" required placeholder="0.00">
+          </label>
+          
+          <button class="remove-line" type="button" aria-label="Remove item">×</button>
+        </div>
+      </div>
+
+      <div class="form-total">
+        <div>
+          <small>Estimated invoice total</small>
+          <strong id="purchase-estimate">$0.00</strong>
+        </div>
+        <button class="btn primary" type="submit" {% if not vendors or not items %}disabled{% endif %}>Save purchase</button>
+      </div>
     </form>
-</section></div>
+  </section>
+</div>
 {% endblock %}
