@@ -3,8 +3,10 @@
 
 import functools
 
+import secrets
+
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -22,12 +24,27 @@ def register():
     # Submits the data with POST
     if request.method == 'POST':
         check_csrf()
+
         username = request.form['username']
         password = request.form['password']
+        registration_code = request.form.get('registration_code', '')
 
         # Obtains database information
         conn = database.get_db()
         error = None
+
+        # Validate registration code
+        # Gets current registration code from secrets
+        expected_code = current_app.config.get('REGISTRATION_CODE')
+
+        # Checks code
+        # If registration code is unavailable
+        if not expected_code:
+            error = 'Registration is currently unavailable.'
+        # Checks if code matches
+        elif not secrets.compare_digest(registration_code, expected_code):
+            error = 'Invalid registration code.'
+
 
         # Validates that fields are not empty
         if not username:
