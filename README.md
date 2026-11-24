@@ -20,7 +20,13 @@ git clone https://github.com/xxllxxllxxll-440/SE-353-Project.git
 cd SE-353-Project
 ```
 
-### 2. Starting the project
+### 2. Setting up `.env`
+
+There are two `.env` files used for this system.
+
+The database `.env`, which provides details on how Flask connects to the MySQL server, needs to be located at [/database/app](/database/app) and an example is available at [/database/app/.env.example](/database/app/.env.example)
+
+### 3. Starting the project
 
 Documentation to start the different applications within the software package
 
